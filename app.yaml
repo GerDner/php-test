@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: caddysvc
+  labels:
+    app: testapp
+spec:
+  type: "LoadBalancer"
+  ports:
+  - port: 80
+    protocol: TCP
+    name: http
+  - port: 2015
+    targetPort: 9376
+    protocol: TCP
+    name: https
+  selector:
+    app: testapp
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: caddy
+spec:
+  replicas: 1
+  selector:
+    app: testapp
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      containers:
+      - name: caddy
+        image: abiosoft/caddy:php
+        ports:
+        - containerPort: 2015

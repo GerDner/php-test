@@ -1,0 +1,16 @@
+---
+version: '2'
+
+services:
+  app:
+    build: .
+
+    stdin_open: true
+    tty: true
+
+    ports:
+      - "8080:80"
+      - "2015:2015"
+    volumes:
+      - .:/srv
+      - ./Caddyfile:/etc/Caddyfile
